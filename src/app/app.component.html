@@ -1,0 +1,22 @@
+<div class="container">
+  <nav class="navigation">
+    <div class="nav-brand">
+      <h2>{{title}} App</h2>
+    </div>
+    <div class="nav-links">
+      <!-- <a routerLink="/chat" routerLinkActive="active">💬 Chat</a> -->
+      <a routerLink="/admin" routerLinkActive="active">⚙️ Admin</a>
+      <button class="copilot-nav-btn" (click)="toggleCopilot()">🤖 Help</button>
+    </div>
+  </nav>
+
+  <div class="app-content">
+    <h1 style="text-align: left;">Variant Families & Variants</h1>
+    <router-outlet></router-outlet>
+  </div>
+
+  <app-copilot-panel
+    [open]="copilotOpen"
+    (close)="copilotOpen=false">
+  </app-copilot-panel>
+</div>

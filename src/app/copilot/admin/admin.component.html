@@ -1,0 +1,113 @@
+<div class="admin-container">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-icon">⚙️</div>
+      <div class="header-text">
+        <h1>Knowledge Base Admin</h1>
+        <p>Manage your copilot's knowledge documents and content</p>
+      </div>
+    </div>
+    <button class="add-btn" (click)="addDocument()" title="Add New Document">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 4a.5.5 0 01.5.5v3h3a.5.5 0 010 1h-3v3a.5.5 0 01-1 0v-3h-3a.5.5 0 010-1h3v-3A.5.5 0 018 4z"/>
+      </svg>
+      Add Document
+    </button>
+  </div>
+
+  <div class="content-area">
+    <div class="table-container" *ngIf="docs && docs.length > 0">
+      <table class="excel-table">
+        <thead>
+          <tr>
+            <th class="row-number">#</th>
+            <th class="header-col">Header</th>
+            <th class="category-col">Category</th>
+            <th class="body-col">Body</th>
+            <th class="keywords-col">Keywords</th>
+            <th class="tags-col">Tags</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of docs; let i = index" class="data-row">
+            <td class="row-number">{{i + 1}}</td>
+            <td class="header-col">
+              <input
+                [(ngModel)]="d.header"
+                placeholder="Enter header"
+                class="cell-input" />
+            </td>
+            <td class="category-col">
+              <input
+                [(ngModel)]="d.category"
+                placeholder="Category"
+                class="cell-input" />
+            </td>
+            <td class="body-col">
+              <textarea
+                [value]="getBodyText(d)"
+                (input)="setBodyText(d, $any($event.target).value)"
+                placeholder="Enter body text"
+                class="cell-textarea"
+                rows="14"></textarea>
+            </td>
+            <td class="keywords-col">
+              <input
+                [(ngModel)]="d.keywords"
+                placeholder="Keywords"
+                class="cell-input" />
+            </td>
+            <td class="tags-col">
+              <input
+                [(ngModel)]="d.tags"
+                placeholder="Tags"
+                class="cell-input" />
+            </td>
+            <td class="actions-col">
+              <button class="delete-btn" (click)="removeDocument(i)" title="Delete Row">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5v7a.5.5 0 01-1 0v-7a.5.5 0 011 0z"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" *ngIf="!docs || docs.length === 0">
+      <div class="empty-icon">📂</div>
+      <h3>No documents yet</h3>
+      <p>Create your first knowledge document to get started</p>
+      <button class="primary-btn" (click)="addDocument()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 4a.5.5 0 01.5.5v3h3a.5.5 0 010 1h-3v3a.5.5 0 01-1 0v-3h-3a.5.5 0 010-1h3v-3A.5.5 0 018 4z"/>
+        </svg>
+        Create First Document
+      </button>
+    </div>
+  </div>
+
+  <div class="action-bar" *ngIf="docs && docs.length > 0">
+    <div class="status-info">
+      <span class="document-count">{{docs.length}} document{{docs.length !== 1 ? 's' : ''}}</span>
+      <span class="save-status" [class.saving]="saving" [class.saved]="saved">
+        {{saving ? 'Saving...' : saved ? 'All changes saved' : 'Unsaved changes'}}
+      </span>
+    </div>
+    <div class="action-buttons">
+      <button class="secondary-btn" (click)="resetChanges()" [disabled]="saving">
+        Reset
+      </button>
+      <button class="primary-btn" (click)="save()" [disabled]="saving">
+        <div class="loading-spinner" *ngIf="saving"></div>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" *ngIf="!saving">
+          <path d="M2 1a1 1 0 00-1 1v9.5a1 1 0 001 1h3.5a1 1 0 001-1V11H7v1.5a.5.5 0 01-.5.5H2a.5.5 0 01-.5-.5V2a.5.5 0 01.5-.5h5.5a.5.5 0 01.5.5V4H7V2a1 1 0 00-1-1H2z"/>
+          <path d="M12.146 6.854a.5.5 0 01.708-.708l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.708-.708L13.293 9.5H8.5a.5.5 0 010-1h4.793l-1.147-1.146z"/>
+        </svg>
+        {{saving ? 'Saving...' : 'Save All Changes'}}
+      </button>
+    </div>
+  </div>
+</div>

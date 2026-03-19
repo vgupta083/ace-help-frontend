@@ -1,0 +1,69 @@
+<div class="overlay" *ngIf="open" (click)="close.emit()"></div>
+
+<div class="panel" [class.open]="open">
+  <div class="header">
+    <div class="header-content">
+      <div class="copilot-icon">🤖</div>
+      <div class="header-text">
+        <h3>ACE Help</h3>
+        <span class="subtitle">Your AI assistant</span>
+      </div>
+    </div>
+    <button class="close-btn" (click)="close.emit()" title="Close">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 9.414l3.293 3.293a1 1 0 001.414-1.414L9.414 8l3.293-3.293a1 1 0 00-1.414-1.414L8 6.586 4.707 3.293a1 1 0 00-1.414 1.414L6.586 8l-3.293 3.293a1 1 0 001.414 1.414L8 9.414z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="chat-container">
+    <div class="welcome-message" >
+          <!-- <div class="welcome-message" *ngIf="!answer && results.length === 0"></div> -->
+      <div class="welcome-icon">👋</div>
+      <h4>Hello Vinay! How can I help you today?</h4>
+      <p>Ask me anything about the system, navigation, or features.</p>
+    </div>
+
+    <div class="messages">
+      <h4 class="message-title"> 🤖 {{answer.split(':')[0]}}:</h4>
+      <div *ngFor="let r of results; let i = index" class="message-card">
+        <div class="message-icon">-</div>
+        <div class="message-content">
+          <h4 class="message-title">{{ r.header }}</h4>
+          <p class="message-text">
+            <ng-container *ngFor="let content of r.body">
+               <div [innerHtml]="content"></div>
+            </ng-container>
+          </p>
+          <button class="action-btn" (click)="go(r.route)" *ngIf="r.route">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM6.5 5a.5.5 0 000 1h3.793L6.146 10.146a.5.5 0 00.708.708L11 6.707V10.5a.5.5 0 001 0V5.5a.5.5 0 00-.5-.5H6.5z"/>
+            </svg>
+            Open
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-container">
+      <input
+        [(ngModel)]="question"
+        (keyup.enter)="ask()"
+        placeholder="Ask Copilot..."
+        class="chat-input"
+        [disabled]="loading" />
+      <button
+        (click)="ask()"
+        class="send-btn"
+        [disabled]="!question.trim() || loading"
+        title="Send message">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" *ngIf="!loading">
+          <path d="M15.854 8.354a.5.5 0 000-.708L11.207 3l-.854.854L13.293 7H1.5a.5.5 0 000 1h11.793l-2.94 2.94.854.854 4.647-4.646z"/>
+        </svg>
+        <div class="loading-spinner" *ngIf="loading"></div>
+      </button>
+    </div>
+  </div>
+</div>
